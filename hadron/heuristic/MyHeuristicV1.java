@@ -20,66 +20,38 @@ public class MyHeuristicV1 implements Heuristic{
                 if(validMove(b,i,j)) {
                     for(int k=j-1;k>=0 && k<d && i-1>=0 && k<=j+1; k++)
                         if(!validMove(b,i-1,k) && b.getCol(i-1,k)==-1) {
-                            switch(checkReserved(b,i-1,k,i,j)) {
-                                case 1 :
-                                    reservedWhite++;
-                                    break;
-                                case 0:
-                                    reservedBlack++;
-                                    break;
-                                case -1:
-                                    nonReserved++;
-                                    break;
-                                default:
-                                    throw new IllegalArgumentException();
+                            switch (checkReserved(b, i - 1, k)) {
+                                case 1 -> reservedWhite++;
+                                case 0 -> reservedBlack++;
+                                case -1 -> nonReserved++;
+                                default -> throw new IllegalArgumentException();
                             }
 
                         }
                     for(int k=j-1;k>=0 && k<d && i+1<d && k<=j+1;k++) {
                         if(!validMove(b,i+1,k) && b.getCol(i+1,k)==-1) {
-                            switch(checkReserved(b,i+1,k,i,j)) {
-                                case 1 :
-                                    reservedWhite++;
-                                    break;
-                                case 0:
-                                    reservedBlack++;
-                                    break;
-                                case -1:
-                                    nonReserved++;
-                                    break;
-                                default:
-                                    throw new IllegalArgumentException();
+                            switch (checkReserved(b, i + 1, k)) {
+                                case 1 -> reservedWhite++;
+                                case 0 -> reservedBlack++;
+                                case -1 -> nonReserved++;
+                                default -> throw new IllegalArgumentException();
                             }
                         }
                     }
                     if(j-1>=0 && b.getCol(i,j-1)==-1) {
-                        switch(checkReserved(b,i,j-1,i,j)) {
-                            case 1 :
-                                reservedWhite++;
-                                break;
-                            case 0:
-                                reservedBlack++;
-                                break;
-                            case -1:
-                                nonReserved++;
-                                break;
-                            default:
-                                throw new IllegalArgumentException();
+                        switch (checkReserved(b, i, j - 1)) {
+                            case 1 -> reservedWhite++;
+                            case 0 -> reservedBlack++;
+                            case -1 -> nonReserved++;
+                            default -> throw new IllegalArgumentException();
                         }
                     }
                     if(j+1<d && b.getCol(i,j+1)==-1) {
-                        switch(checkReserved(b,i,j+1,i,j)) {
-                            case 1 :
-                                reservedWhite++;
-                                break;
-                            case 0:
-                                reservedBlack++;
-                                break;
-                            case -1:
-                                nonReserved++;
-                                break;
-                            default:
-                                throw new IllegalArgumentException();
+                        switch (checkReserved(b, i, j + 1)) {
+                            case 1 -> reservedWhite++;
+                            case 0 -> reservedBlack++;
+                            case -1 -> nonReserved++;
+                            default -> throw new IllegalArgumentException();
                         }
                     }
                 }
@@ -94,25 +66,16 @@ public class MyHeuristicV1 implements Heuristic{
 
     }
 
-    private int checkReserved(Board b, int l, int k, int i, int j) {
+    private int checkReserved(Board b, int l, int k) {
         List<Integer> closeValues = getClose(b,l,k);
         int nBlack = 0, nWhite = 0, nEmpty=0, nBlocked = 0;
         for(int x : closeValues) {
             switch (x) {
-                case 1:
-                    nWhite++;
-                    break;
-                case 0:
-                    nBlack++;
-                    break;
-                case -1:
-                    nEmpty++;
-                    break;
-                case -2:
-                    nBlocked++;
-                    break;
-                default:
-                    throw new IllegalArgumentException();
+                case 1 -> nWhite++;
+                case 0 -> nBlack++;
+                case -1 -> nEmpty++;
+                case -2 -> nBlocked++;
+                default -> throw new IllegalArgumentException();
             }
         }
         if(closeValues.size()==2) {
@@ -191,10 +154,7 @@ public class MyHeuristicV1 implements Heuristic{
                 nn += 1;
 
 
-        if(nn != np)
-            return false;
-
-        return true;
+        return nn == np;
     }
 
 
