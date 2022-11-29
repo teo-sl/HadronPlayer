@@ -37,7 +37,7 @@ public class MyHeuristicV1 implements Heuristic{
                         }
                     for(int k=j-1;k>=0 && k<d && i+1<d && k<=j+1;k++) {
                         if(!validMove(b,i+1,k) && b.getCol(i+1,k)==-1) {
-                            switch(checkReserved(b,i-1,k,i,j)) {
+                            switch(checkReserved(b,i+1,k,i,j)) {
                                 case 1 :
                                     reservedWhite++;
                                     break;
@@ -96,8 +96,8 @@ public class MyHeuristicV1 implements Heuristic{
 
     private int checkReserved(Board b, int l, int k, int i, int j) {
         List<Integer> closeValues = getClose(b,l,k);
-        int nBlack = 0, nWhite = 0, nEmpty=0;
-        for(int x : closeValues)
+        int nBlack = 0, nWhite = 0, nEmpty=0, nBlocked = 0;
+        for(int x : closeValues) {
             switch (x) {
                 case 1:
                     nWhite++;
@@ -108,9 +108,13 @@ public class MyHeuristicV1 implements Heuristic{
                 case -1:
                     nEmpty++;
                     break;
+                case -2:
+                    nBlocked++;
+                    break;
                 default:
                     throw new IllegalArgumentException();
             }
+        }
         if(closeValues.size()==2) {
             if(Math.abs(nBlack-nWhite)==1) {
                 return (nBlack-nWhite == 1) ? 0 : 1;
@@ -118,30 +122,35 @@ public class MyHeuristicV1 implements Heuristic{
             return -1;
         }
         if(closeValues.size()==3) {
-            if(nEmpty==1) {
-                return (nBlack-nWhite == 1) ? 0 : 1;
-            }
+            if(nBlack+nWhite+nBlocked==2) return (nBlack-nWhite == 1) ? 0 : 1;
             return -1;
+
         }
-        // check 3 full reserved
-        if(nEmpty>1) return -1;
-        return (nBlack-nWhite == 1) ? 0 : 1;
+        if(nBlack+nWhite+nBlocked == 3 && nBlack<3 && nWhite<3)
+            return (nBlack-nWhite==1) ? 0 : 1;
+        return -1;
 
     }
 
     private List<Integer> getClose(Board b, int l, int k) {
         List<Integer> ret = new LinkedList<>();
-
         if(k-1>=0)
-            ret.add(new Integer(b.getCol(l,k-1)));
+            ret.add(evaluatePos(b,l,k-1));
         if(k+1<d)
-            ret.add(new Integer(b.getCol(l,k+1)));
+            ret.add(evaluatePos(b,l,k+1));
         if(l+1<d)
-            ret.add(new Integer(b.getCol(l+1,k)));
-        if(l-1>=0)
-            ret.add(new Integer(b.getCol(l-1,k)));
+            ret.add(evaluatePos(b,l+1,k));
 
+        if(l-1>=0)
+            ret.add(evaluatePos(b,l-1,k));
         return ret;
+    }
+
+    private Integer evaluatePos(Board b, int i, int j) {
+        int v = b.getCol(i,j);
+        if(v==-1)
+            return validMove(b,i,j) ? -1 : -2;
+        return v;
     }
 
 

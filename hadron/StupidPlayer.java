@@ -27,8 +27,7 @@ public class StupidPlayer {
     }
 
     public static void main(String[] args) {
-        //Heuristic h = new GenericHeuristic();
-        Heuristic h = new MyHeuristicV1();
+        Heuristic h = new GenericHeuristic();
         Player p1 = new Player(h);
         p1.start(args[0], Integer.parseInt(args[1]));
     }
