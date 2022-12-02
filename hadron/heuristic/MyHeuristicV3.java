@@ -4,7 +4,7 @@ import hadron.board.Board;
 
 
 
-public class MyHeuristicV2 implements Heuristic{
+public class MyHeuristicV3 implements Heuristic{
     private static final int d = 9;
 
     @Override
@@ -18,50 +18,48 @@ public class MyHeuristicV2 implements Heuristic{
             for(int j=0;j<d;++j)
                 if(validMove(b,i,j)) { // potential reserved
                     nMoves++;
+                    boolean reserved = false;
                     if(i-1>=0) {
                         positionValue = getPositionValue(b,i-1,j);
-                        if((positionValue==-1 || positionValue==1) && closeVerification(b,i-1,j,-1*positionValue)==1) {
+                        if((positionValue==-1 || positionValue==1) && closeVerification(b,i-1,j,-1*positionValue)) {
                             if (positionValue == 1) reservedWhite++;
                             else reservedBlack++;
-
+                            reserved=true;
                         }
-                        else
-                            nonReserved++;
                     }
 
                     if(i+1<d) {
                         positionValue = getPositionValue(b,i+1,j);
-                        if((positionValue==-1 || positionValue==1) && closeVerification(b,i+1,j,-1*positionValue)==1) {
+                        if((positionValue==-1 || positionValue==1) && closeVerification(b,i+1,j,-1*positionValue)) {
                             if (positionValue == 1) reservedWhite++;
                             else reservedBlack++;
+                            reserved=true;
                         }
-                        else
-                            nonReserved++;
 
                     }
 
 
                     if(j-1>=0) {
                         positionValue = getPositionValue(b,i,j-1);
-                        if((positionValue==-1 || positionValue==1) && closeVerification(b,i,j-1,-1*positionValue)==1) {
+                        if((positionValue==-1 || positionValue==1) && closeVerification(b,i,j-1,-1*positionValue)) {
                             if (positionValue == 1) reservedWhite++;
                             else reservedBlack++;
+                            reserved=true;
                         }
-                        else
-                            nonReserved++;
 
                     }
 
 
                     if(j+1<d) {
                         positionValue = getPositionValue(b,i,j+1);
-                        if((positionValue==-1 || positionValue==1) && closeVerification(b,i,j+1,-1*positionValue)==1) {
+                        if((positionValue==-1 || positionValue==1) && closeVerification(b,i,j+1,-1*positionValue)) {
                             if (positionValue == 1) reservedWhite++;
                             else reservedBlack++;
+                            reserved = true;
                         }
-                        else
-                            nonReserved++;
                     }
+                    if(!reserved)
+                        nonReserved++;
 
                 }
         if(nMoves==0) return -1_000_000D;
@@ -85,33 +83,25 @@ public class MyHeuristicV2 implements Heuristic{
 
 
     // restituisce il numero di adiacenti con valore 0 o pari al positionValue
-    public int closeVerification(Board b, int i,int j, int positionValue) {
+    public boolean closeVerification(Board b, int i,int j, int positionValue) {
         int count = 0;
-        int closeValue;
         if(i-1>=0 && b.getCol(i-1,j)==-1) {
-            closeValue = getPositionValue(b,i-1,j);
-            if(closeValue==0 || closeValue==positionValue)
-                count++;
+           count++;
         }
         if(i+1<d && b.getCol(i+1,j)==-1) {
-            closeValue = getPositionValue(b,i+1,j);
-            if(closeValue==0 || closeValue==positionValue)
-                count++;
+            count++;
         }
 
         if(j-1>=0 && b.getCol(i,j-1)==-1) {
-            closeValue = getPositionValue(b,i,j-1);
-            if(closeValue==0 || closeValue==positionValue)
-                count++;
+            count++;
         }
 
 
         if(j+1<d && b.getCol(i,j+1)==-1) {
-            closeValue = getPositionValue(b,i,j+1);
-            if(closeValue==0 || closeValue==positionValue)
-                count++;
+            count++;
         }
-        return count;
+        return count==1;
+
     }
 
 

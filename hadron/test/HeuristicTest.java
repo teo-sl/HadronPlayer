@@ -5,22 +5,25 @@ import hadron.board.ByteBoard;
 import hadron.heuristic.Heuristic;
 import hadron.heuristic.MyHeuristicV1;
 import hadron.heuristic.MyHeuristicV2;
+import hadron.heuristic.MyHeuristicV4;
 
 public class HeuristicTest {
     public static void main(String[] args) {
         Board b = new ByteBoard();
-        Heuristic h1 = new MyHeuristicV1();
-        Heuristic h2 = new MyHeuristicV2();
+        Heuristic h4 = new MyHeuristicV4();
 
-        b.addPawn(3,2,0);
-        b.addPawn(4,3,1);
-        b.addPawn(4,1,0);
-        int size = b.getSons((byte) 0).size();
+        for(int i=0;i<9;++i)
+            for(int j=0;j<9;++j)
+                if(i==8 && j==8) continue;
+                else b.addPawn(i,j,0);
+
+
+
+        b.addPawn(7,8,1);
+
 
 
         System.out.println(b);
-        System.out.println("moves size value: "+size);
-        System.out.println("\n\n board heuristic v1 value: " + h1.evaluate(b,0));
-        System.out.println("\n\n board heuristic v2 value: " + h2.evaluate(b,0));
+        System.out.println("\n\n board heuristic v1 value: " + h4.evaluate(b,1));
     }
 }

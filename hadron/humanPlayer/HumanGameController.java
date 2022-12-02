@@ -48,7 +48,7 @@ public class HumanGameController implements GameController {
             try {
                 i = (sc.next().toLowerCase().charAt(0))-97;
                 j = sc.nextInt()-1;
-                if(i<0 || i>=9 || j<0 || i>=9 )
+                if(i<0 || i>=9 || j<0 || j>=9 )
                     throw new IllegalArgumentException();
                 if(board.getCol(i,j)!=-1)
                     throw new IllegalArgumentException();

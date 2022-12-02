@@ -12,14 +12,16 @@ public class MyHeuristicV1 implements Heuristic{
     @Override
     public double evaluate(Board b, int col) {
 
-        if(b.isFinal()) return -1_000_000D;
+        //if(b.isFinal()) return -1_000_000D;
+        int nMoves=0;
 
         int reservedWhite =0, reservedBlack=0, nonReserved=0;
         for(int i=0;i<d;++i)
             for (int j=0;j<d;++j)
                 if(validMove(b,i,j)) {
-                    for(int k=j-1;k>=0 && k<d && i-1>=0 && k<=j+1; k++)
-                        if(!validMove(b,i-1,k) && b.getCol(i-1,k)==-1) {
+                    nMoves++;
+                    for(int k=j-1;i-1>=0 && k<=j+1; k++)
+                        if(k>=0 && k<d && !validMove(b,i-1,k) && b.getCol(i-1,k)==-1) {
                             switch(checkReserved(b,i-1,k,i,j)) {
                                 case 1 :
                                     reservedWhite++;
@@ -35,8 +37,8 @@ public class MyHeuristicV1 implements Heuristic{
                             }
 
                         }
-                    for(int k=j-1;k>=0 && k<d && i+1<d && k<=j+1;k++) {
-                        if(!validMove(b,i+1,k) && b.getCol(i+1,k)==-1) {
+                    for(int k=j-1; i+1<d && k<=j+1;k++) {
+                        if(k>=0 && k<d && !validMove(b,i+1,k) && b.getCol(i+1,k)==-1) {
                             switch(checkReserved(b,i+1,k,i,j)) {
                                 case 1 :
                                     reservedWhite++;
@@ -83,6 +85,7 @@ public class MyHeuristicV1 implements Heuristic{
                         }
                     }
                 }
+        if(nMoves==0) return -1_000_000D;
         double hReserved = (reservedWhite-reservedBlack)*100;
 
         // col == 1 white; col == 0 black;
@@ -90,6 +93,12 @@ public class MyHeuristicV1 implements Heuristic{
         double hNonReserved = (nonReserved%2==1) ? 10 : -10;
 
         double w1 = 1, w2 = 0;
+
+        if(nMoves<10) {
+            w2=0.5;
+            w1=0.5;
+        }
+
         return w1*hReserved+w2*hNonReserved;
 
     }
