@@ -10,12 +10,14 @@ public class MyHeuristicV2 implements Heuristic{
     @Override
     public double evaluate(Board b, int col) {
 
-        if(b.isFinal()) return 1_000_000D;
+        //if(b.isFinal()) return -1_000_000D;
+        int nMoves = 0;
         int positionValue;
         int reservedWhite=0, reservedBlack=0, nonReserved=0;
         for(int i=0;i<d;++i)
             for(int j=0;j<d;++j)
                 if(validMove(b,i,j)) { // potential reserved
+                    nMoves++;
                     boolean reserved = false;
                     if(i-1>=0) {
                         positionValue = getPositionValue(b,i-1,j);
@@ -60,11 +62,12 @@ public class MyHeuristicV2 implements Heuristic{
                         nonReserved++;
 
                 }
+        if(nMoves==0) return -1_000_000D;
         double hReserved = (reservedWhite-reservedBlack)*100;
 
         // col == 1 white; col == 0 black;
         hReserved = (col==1) ? hReserved : -1*hReserved;
-        double hNonReserved = (nonReserved%2==0) ? 10 : -10;
+        double hNonReserved = (nonReserved%2==1) ? 10 : -10;
 
         double w1 = 0.8, w2 = 0.2;
         return w1*hReserved+w2*hNonReserved;

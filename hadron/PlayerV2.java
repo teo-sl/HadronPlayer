@@ -28,7 +28,7 @@ public class PlayerV2 {
     public static void main(String[] args) {
         //Heuristic h = new GenericHeuristic();
         Heuristic h = new MyHeuristicV2();
-        PlayerV1 p1 = new PlayerV1(h);
+        PlayerV2 p1 = new PlayerV2(h);
         p1.start(args[0], Integer.parseInt(args[1]));
     }
 

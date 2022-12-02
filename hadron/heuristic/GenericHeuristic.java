@@ -17,7 +17,7 @@ public class GenericHeuristic implements Heuristic {
 		// Se la hadron.board da una vittoria vuol dire che il giocatore attuale è rimasto senza mosse
 		// col è il vincitore
 		if(b.isFinal())
-			return +1000000D;
+			return -1000000D;
 
 		return  0;
 	}

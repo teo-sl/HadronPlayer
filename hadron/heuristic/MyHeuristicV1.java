@@ -12,7 +12,7 @@ public class MyHeuristicV1 implements Heuristic{
     @Override
     public double evaluate(Board b, int col) {
 
-        if(b.isFinal()) return 1_000_000D;
+        if(b.isFinal()) return -1_000_000D;
 
         int reservedWhite =0, reservedBlack=0, nonReserved=0;
         for(int i=0;i<d;++i)
@@ -87,7 +87,7 @@ public class MyHeuristicV1 implements Heuristic{
 
         // col == 1 white; col == 0 black;
         hReserved = (col==1) ? hReserved : -1*hReserved;
-        double hNonReserved = (nonReserved%2==0) ? 10 : -10;
+        double hNonReserved = (nonReserved%2==1) ? 10 : -10;
 
         double w1 = 0.8, w2 = 0.2;
         return w1*hReserved+w2*hNonReserved;
