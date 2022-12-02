@@ -67,9 +67,9 @@ public class MyHeuristicV2 implements Heuristic{
 
         // col == 1 white; col == 0 black;
         hReserved = (col==1) ? hReserved : -1*hReserved;
-        double hNonReserved = (nonReserved%2==1) ? 10 : -10;
+        double hNonReserved = (nonReserved%2==1) ? 100 : -100;
 
-        double w1 = 0.8, w2 = 0.2;
+        double w1 = 1, w2 = 0;
         return w1*hReserved+w2*hNonReserved;
 
     }

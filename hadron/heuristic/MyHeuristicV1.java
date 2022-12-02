@@ -89,7 +89,7 @@ public class MyHeuristicV1 implements Heuristic{
         hReserved = (col==1) ? hReserved : -1*hReserved;
         double hNonReserved = (nonReserved%2==1) ? 10 : -10;
 
-        double w1 = 0.8, w2 = 0.2;
+        double w1 = 1, w2 = 0;
         return w1*hReserved+w2*hNonReserved;
 
     }
