@@ -12,7 +12,6 @@ public class MyHeuristicV1R implements Heuristic {
     @Override
     public double evaluate(Board b, int col) {
 
-        //if(b.isFinal()) return -1_000_000D;
         int nMoves = 0;
 
         int reservedWhite = 0, reservedBlack = 0, nonReserved = 0;
@@ -22,7 +21,7 @@ public class MyHeuristicV1R implements Heuristic {
                     nMoves++;
                     boolean flag = false;
                     if (i - 1 >= 0 && b.getCol(i - 1, j) == -1 && !validMove(b, i - 1, j)) {
-                        switch (checkReserved(b, i - 1, j, i, j)) {
+                        switch (checkReserved(b, i - 1, j)) {
                             case 1:
                                 reservedWhite++;
                                 flag = true;
@@ -40,7 +39,7 @@ public class MyHeuristicV1R implements Heuristic {
                     }
 
                     if (i + 1 < d && b.getCol(i + 1, j) == -1 && !validMove(b, i + 1, j)) {
-                        switch (checkReserved(b, i + 1, j, i, j)) {
+                        switch (checkReserved(b, i + 1, j)) {
                             case 1:
                                 reservedWhite++;
                                 flag = true;
@@ -56,7 +55,7 @@ public class MyHeuristicV1R implements Heuristic {
                         }
                     }
                     if (j - 1 >= 0 && b.getCol(i, j - 1) == -1 && !validMove(b,i,j-1)) {
-                        switch (checkReserved(b, i, j - 1, i, j)) {
+                        switch (checkReserved(b, i, j - 1)) {
                             case 1:
                                 reservedWhite++;
                                 flag = true;
@@ -72,7 +71,7 @@ public class MyHeuristicV1R implements Heuristic {
                         }
                     }
                     if (j + 1 < d && b.getCol(i, j + 1) == -1 && !validMove(b,i,j+1)) {
-                        switch (checkReserved(b, i, j + 1, i, j)) {
+                        switch (checkReserved(b, i, j + 1)) {
                             case 1:
                                 reservedWhite++;
                                 flag = true;
@@ -108,11 +107,12 @@ public class MyHeuristicV1R implements Heuristic {
 
     }
 
-    private int checkReserved(Board b, int l, int k, int i, int j) {
-        List<Integer> closeValues = getClose(b, l, k);
+    private int checkReserved(Board b, int i, int j) {
         int nBlack = 0, nWhite = 0, nEmpty = 0, nBlocked = 0;
-        for (int x : closeValues) {
-            switch (x) {
+        int nPositions= 0;
+        if(i-1>=0) {
+            nPositions++;
+            switch (evaluatePos(b, i - 1, j)) {
                 case 1:
                     nWhite++;
                     break;
@@ -129,13 +129,71 @@ public class MyHeuristicV1R implements Heuristic {
                     throw new IllegalArgumentException();
             }
         }
-        if (closeValues.size() == 2) {
+        if(i+1<d) {
+            nPositions++;
+            switch (evaluatePos(b, i + 1, j)) {
+                case 1:
+                    nWhite++;
+                    break;
+                case 0:
+                    nBlack++;
+                    break;
+                case -1:
+                    nEmpty++;
+                    break;
+                case -2:
+                    nBlocked++;
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+        if(j-1>=0) {
+            nPositions++;
+            switch (evaluatePos(b, i, j - 1)) {
+                case 1:
+                    nWhite++;
+                    break;
+                case 0:
+                    nBlack++;
+                    break;
+                case -1:
+                    nEmpty++;
+                    break;
+                case -2:
+                    nBlocked++;
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+        if(j+1<d) {
+            nPositions++;
+            switch (evaluatePos(b, i, j + 1)) {
+                case 1:
+                    nWhite++;
+                    break;
+                case 0:
+                    nBlack++;
+                    break;
+                case -1:
+                    nEmpty++;
+                    break;
+                case -2:
+                    nBlocked++;
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+
+        if (nPositions == 2) {
             if (Math.abs(nBlack - nWhite) == 1) {
                 return (nBlack - nWhite == 1) ? 0 : 1;
             }
             return -1;
         }
-        if (closeValues.size() == 3) {
+        if (nPositions == 3) {
             if (nBlack + nWhite + nBlocked == 2) return (nBlack - nWhite == 1) ? 0 : 1;
             return -1;
 
@@ -146,18 +204,6 @@ public class MyHeuristicV1R implements Heuristic {
 
     }
 
-    private List<Integer> getClose(Board b, int l, int k) {
-        List<Integer> ret = new LinkedList<>();
-        if (k - 1 >= 0)
-            ret.add(evaluatePos(b, l, k - 1));
-        if (k + 1 < d)
-            ret.add(evaluatePos(b, l, k + 1));
-        if (l + 1 < d)
-            ret.add(evaluatePos(b, l + 1, k));
-        if (l - 1 >= 0)
-            ret.add(evaluatePos(b, l - 1, k));
-        return ret;
-    }
 
     private Integer evaluatePos(Board b, int i, int j) {
         int v = b.getCol(i, j);
