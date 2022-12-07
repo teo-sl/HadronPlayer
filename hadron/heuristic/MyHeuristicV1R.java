@@ -6,7 +6,7 @@ import hadron.board.Board;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MyHeuristicV1 implements Heuristic {
+public class MyHeuristicV1R implements Heuristic {
     private static final int d = 9;
 
     @Override
