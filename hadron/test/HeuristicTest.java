@@ -13,15 +13,20 @@ public class HeuristicTest {
 
         Board b = new ByteBoard();
         Heuristic h1 = new MyHeuristicV1(), h1r = new MyHeuristicV1R();
+        Heuristic hStupid = new GenericHeuristic();
         Random r = new Random();
         double errorSum = 0;
-        long s1,e1,e2;
-        long time1=0,time2=0;
+        long s1,e1,e2,sStupid, eStupid;
+        long time1=0,time2=0,timeStupid=0;
         int nMoves = 60, col = 1,errors=0;
         for(int i=0;i<nMoves && b.getSons((byte)col).size()>0;++i) {
             List<Node> moves = b.getSons((byte)col);
             b=moves.get(r.nextInt(moves.size())).getBoard();
             System.out.println("h1 : "+h1.evaluate(b,col)+" h1r : "+h1r.evaluate(b,col));
+            sStupid = System.currentTimeMillis();
+            hStupid.evaluate(b,col);
+            eStupid = System.currentTimeMillis();
+            timeStupid+=eStupid-sStupid;
             errorSum+=Math.abs(h1.evaluate(b,col)-h1r.evaluate(b,col));
             s1 = System.currentTimeMillis();
             h1.evaluate(b,col);
@@ -39,6 +44,8 @@ public class HeuristicTest {
         System.out.println("Time h1 : "+time1+" Time h1 r : "+time2);
         System.out.println("Errors : "+errors);
         System.out.println("Error sum : "+errorSum);
+
+        System.out.println("Time stupid heuristic "+timeStupid);
 
     }
     // define equals for double

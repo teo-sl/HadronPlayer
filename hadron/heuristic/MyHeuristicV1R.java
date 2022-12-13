@@ -8,6 +8,7 @@ public class MyHeuristicV1R implements Heuristic {
     private static final int d = 9;
     private static final Random r = new Random();
 
+
     @Override
     public double evaluate(Board b, int col) {
 
@@ -88,24 +89,34 @@ public class MyHeuristicV1R implements Heuristic {
                     }
                     if (!flag) nonReserved++;
                 }
-        if (nMoves == 0) return -1_000_000D;
-        double hReserved = (reservedWhite - reservedBlack) * 100;
 
-        // col == 1 white; col == 0 black;
+        // final board case
+        if (nMoves == 0) return -1_000_000D;
+
+
+        int hReserved = (reservedWhite - reservedBlack) * 100;
         hReserved = (col == 1) ? hReserved : -1 * hReserved;
-        double hNonReserved = (nonReserved % 2 == 1) ? 100 : -100;
+
+
+        int hNonReserved = (nonReserved % 2 == 1) ? 100 : -100;
 
         double w1 = 1, w2 = 0;
 
-        // 0.3829 0.9499 51
         if (nMoves < 10) {
             w2 = 0.5;
             w1 = 0.5;
         }
-        return w1 * hReserved + w2 * hNonReserved + (r.nextDouble() * 2 - 1);
+        return w1 * hReserved + w2 * hNonReserved+ (r.nextDouble() * 2 - 1);
 
     }
 
+    /*
+    *   The method verifies if the board's position in (i,j) is a special one.
+    *   It returns:
+    *   1 if the position is a special for white
+    *   0 if the position is a special for black
+    *   -1 if the position is nota a special one
+     */
     private int checkReserved(Board b, int i, int j) {
         int nBlack = 0, nWhite = 0, nBlocked = 0;
         int nPositions= 0;
@@ -182,24 +193,38 @@ public class MyHeuristicV1R implements Heuristic {
             }
         }
 
-        if (nPositions == 2) {
-            if (Math.abs(nBlack - nWhite) == 1) {
-                return (nBlack - nWhite == 1) ? 0 : 1;
-            }
-            return -1;
-        }
-        if (nPositions == 3) {
-            if (nBlack + nWhite + nBlocked == 2) return (nBlack - nWhite == 1) ? 0 : 1;
-            return -1;
+
+        switch (nPositions) {
+            case 2:
+                if(nBlack==1 || nWhite == 1)
+                    return (nBlack==1) ? 0 : 1;
+                else
+                    return -1;
+            case 3:
+                if(nBlack+nWhite+nBlocked==2)
+                    return (nBlack-nWhite==1) ? 0:1;
+                else
+                    return -1;
+            default:
+                if(nBlack+nWhite+nBlocked == 3 && nBlack<3 && nWhite<3)
+                    return (nBlack-nWhite==1) ? 0 : 1;
+                else
+                    return -1;
 
         }
-        if (nBlack + nWhite + nBlocked == 3 && nBlack < 3 && nWhite < 3)
-            return (nBlack - nWhite == 1) ? 0 : 1;
-        return -1;
-
     }
 
 
+    /*
+    *
+    *   The method evaluates the position in (i,j) of the board.
+    *   It returns:
+    *   1 if the position is occupied by a white pawn
+    *   0 if the position is occupied by a black pawn
+    *   -1 if the position is empty and valid
+    *  -2 if the position is empty and not valid
+    *
+     */
     private Integer evaluatePos(Board b, int i, int j) {
         int v = b.getCol(i, j);
         if (v == -1)
@@ -208,6 +233,13 @@ public class MyHeuristicV1R implements Heuristic {
     }
 
 
+
+    /*
+    *
+    *  The method verifies if the position in (i,j) is a valid move for the player
+    * It returns true if the position is valid, false otherwise
+    *
+    */
     private boolean validMove(Board b, int i, int j) {
         int nPawn = b.getPawn(i, j);
 
