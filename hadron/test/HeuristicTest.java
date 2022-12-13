@@ -10,9 +10,11 @@ import java.util.Random;
 
 public class HeuristicTest {
     public static void main(String[] args) {
+
         Board b = new ByteBoard();
         Heuristic h1 = new MyHeuristicV1(), h1r = new MyHeuristicV1R();
         Random r = new Random();
+        double errorSum = 0;
         long s1,e1,e2;
         long time1=0,time2=0;
         int nMoves = 60, col = 1,errors=0;
@@ -20,6 +22,7 @@ public class HeuristicTest {
             List<Node> moves = b.getSons((byte)col);
             b=moves.get(r.nextInt(moves.size())).getBoard();
             System.out.println("h1 : "+h1.evaluate(b,col)+" h1r : "+h1r.evaluate(b,col));
+            errorSum+=Math.abs(h1.evaluate(b,col)-h1r.evaluate(b,col));
             s1 = System.currentTimeMillis();
             h1.evaluate(b,col);
             e1 = System.currentTimeMillis();
@@ -31,7 +34,12 @@ public class HeuristicTest {
                 errors++;
             col = 1-col;
         }
+
+
         System.out.println("Time h1 : "+time1+" Time h1 r : "+time2);
+        System.out.println("Errors : "+errors);
+        System.out.println("Error sum : "+errorSum);
+
     }
     // define equals for double
     public static boolean equals(double a, double b) {

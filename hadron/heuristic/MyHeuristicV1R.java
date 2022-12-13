@@ -2,12 +2,11 @@ package hadron.heuristic;
 
 import hadron.board.Board;
 
-
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Random;
 
 public class MyHeuristicV1R implements Heuristic {
     private static final int d = 9;
+    private static final Random r = new Random();
 
     @Override
     public double evaluate(Board b, int col) {
@@ -98,17 +97,17 @@ public class MyHeuristicV1R implements Heuristic {
 
         double w1 = 1, w2 = 0;
 
+        // 0.3829 0.9499 51
         if (nMoves < 10) {
             w2 = 0.5;
             w1 = 0.5;
         }
-
-        return w1 * hReserved + w2 * hNonReserved;
+        return w1 * hReserved + w2 * hNonReserved + (r.nextDouble() * 2 - 1);
 
     }
 
     private int checkReserved(Board b, int i, int j) {
-        int nBlack = 0, nWhite = 0, nEmpty = 0, nBlocked = 0;
+        int nBlack = 0, nWhite = 0, nBlocked = 0;
         int nPositions= 0;
         if(i-1>=0) {
             nPositions++;
@@ -120,7 +119,6 @@ public class MyHeuristicV1R implements Heuristic {
                     nBlack++;
                     break;
                 case -1:
-                    nEmpty++;
                     break;
                 case -2:
                     nBlocked++;
@@ -139,7 +137,6 @@ public class MyHeuristicV1R implements Heuristic {
                     nBlack++;
                     break;
                 case -1:
-                    nEmpty++;
                     break;
                 case -2:
                     nBlocked++;
@@ -158,7 +155,6 @@ public class MyHeuristicV1R implements Heuristic {
                     nBlack++;
                     break;
                 case -1:
-                    nEmpty++;
                     break;
                 case -2:
                     nBlocked++;
@@ -177,7 +173,6 @@ public class MyHeuristicV1R implements Heuristic {
                     nBlack++;
                     break;
                 case -1:
-                    nEmpty++;
                     break;
                 case -2:
                     nBlocked++;
@@ -250,10 +245,7 @@ public class MyHeuristicV1R implements Heuristic {
                 nn += 1;
 
 
-        if (nn != np)
-            return false;
-
-        return true;
+        return nn == np;
     }
 
 
