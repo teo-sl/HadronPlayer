@@ -25,7 +25,7 @@ public class MyHeuristicV1R implements Heuristic {
                     nMoves++;
                     flag = false;
                     if (i - 1 >= 0 && b.getCol(i - 1, j) == -1 && !validMove(b, i - 1, j)) {
-                        switch (checkReserved(b, i - 1, j)) {
+                        switch (checkSpecial(b, i - 1, j)) {
                             case 1:
                                 specialsWhite++;
                                 flag = true;
@@ -43,7 +43,7 @@ public class MyHeuristicV1R implements Heuristic {
                     }
 
                     if (i + 1 < d && b.getCol(i + 1, j) == -1 && !validMove(b, i + 1, j)) {
-                        switch (checkReserved(b, i + 1, j)) {
+                        switch (checkSpecial(b, i + 1, j)) {
                             case 1:
                                 specialsWhite++;
                                 flag = true;
@@ -59,7 +59,7 @@ public class MyHeuristicV1R implements Heuristic {
                         }
                     }
                     if (j - 1 >= 0 && b.getCol(i, j - 1) == -1 && !validMove(b, i, j - 1)) {
-                        switch (checkReserved(b, i, j - 1)) {
+                        switch (checkSpecial(b, i, j - 1)) {
                             case 1:
                                 specialsWhite++;
                                 flag = true;
@@ -75,7 +75,7 @@ public class MyHeuristicV1R implements Heuristic {
                         }
                     }
                     if (j + 1 < d && b.getCol(i, j + 1) == -1 && !validMove(b, i, j + 1)) {
-                        switch (checkReserved(b, i, j + 1)) {
+                        switch (checkSpecial(b, i, j + 1)) {
                             case 1:
                                 specialsWhite++;
                                 flag = true;
@@ -103,7 +103,7 @@ public class MyHeuristicV1R implements Heuristic {
         hSpecialMoves = (col == 1) ? hSpecialMoves : -1 * hSpecialMoves;
 
         // defining heuristic value for non-special moves
-        int hNonSpecials = (nonSpecials % 2 == 1) ? 100 : -100;
+        int hParity = (nonSpecials % 2 == 1) ? 100 : -100;
 
 
         // changing heuristic weights according to the number of remaining moves
@@ -112,7 +112,7 @@ public class MyHeuristicV1R implements Heuristic {
             w1 = 0.5;
         }
 
-        return w1 * hSpecialMoves + w2 * hNonSpecials + (r.nextDouble() * 2 - 1);
+        return w1 * hSpecialMoves + w2 * hParity + (r.nextDouble() * 2 - 1);
 
     }
 
@@ -129,7 +129,7 @@ public class MyHeuristicV1R implements Heuristic {
      * @throws IllegalArgumentException if the position is not valid
      */
 
-    private int checkReserved(Board b, int i, int j) {
+    private int checkSpecial(Board b, int i, int j) {
         int nBlack = 0, nWhite = 0, nBlocked = 0;
         int nPositions = 0;
         if (i - 1 >= 0) {
