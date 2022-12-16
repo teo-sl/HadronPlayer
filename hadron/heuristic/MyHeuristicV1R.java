@@ -85,7 +85,6 @@ public class MyHeuristicV1R implements Heuristic {
                                 flag = true;
                                 break;
                             case -1:
-
                                 break;
                             default:
                                 throw new IllegalArgumentException();
