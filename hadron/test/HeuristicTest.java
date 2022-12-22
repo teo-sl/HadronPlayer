@@ -2,28 +2,54 @@ package hadron.test;
 
 import hadron.board.Board;
 import hadron.board.ByteBoard;
-import hadron.heuristic.Heuristic;
-import hadron.heuristic.MyHeuristicV1;
-import hadron.heuristic.MyHeuristicV2;
-import hadron.heuristic.MyHeuristicV4;
+import hadron.heuristic.*;
+import hadron.research.Node;
+
+import java.util.List;
+import java.util.Random;
 
 public class HeuristicTest {
     public static void main(String[] args) {
+
         Board b = new ByteBoard();
-        Heuristic h4 = new MyHeuristicV4();
+        Heuristic h1 = new MyHeuristicV1(), h1r = new MyHeuristicV1R();
+        Heuristic hStupid = new GenericHeuristic();
+        Random r = new Random();
+        double errorSum = 0;
+        long s1,e1,e2,sStupid, eStupid;
+        long time1=0,time2=0,timeStupid=0;
+        int nMoves = 60, col = 1,errors=0;
+        for(int i=0;i<nMoves && b.getSons((byte)col).size()>0;++i) {
+            List<Node> moves = b.getSons((byte)col);
+            b=moves.get(r.nextInt(moves.size())).getBoard();
+            System.out.println("h1 : "+h1.evaluate(b,col)+" h1r : "+h1r.evaluate(b,col));
+            sStupid = System.currentTimeMillis();
+            hStupid.evaluate(b,col);
+            eStupid = System.currentTimeMillis();
+            timeStupid+=eStupid-sStupid;
+            errorSum+=Math.abs(h1.evaluate(b,col)-h1r.evaluate(b,col));
+            s1 = System.currentTimeMillis();
+            h1.evaluate(b,col);
+            e1 = System.currentTimeMillis();
+            h1r.evaluate(b,col);
+            e2 = System.currentTimeMillis();
+            time1 += e1-s1;
+            time2 += e2-e1;
+            if(!equals(h1.evaluate(b,col),h1r.evaluate(b,col)))
+                errors++;
+            col = 1-col;
+        }
 
-        for(int i=0;i<9;++i)
-            for(int j=0;j<9;++j)
-                if(i==8 && j==8) continue;
-                else b.addPawn(i,j,0);
 
+        System.out.println("Time h1 : "+time1+" Time h1 r : "+time2);
+        System.out.println("Errors : "+errors);
+        System.out.println("Error sum : "+errorSum);
 
+        System.out.println("Time stupid heuristic "+timeStupid);
 
-        b.addPawn(7,8,1);
-
-
-
-        System.out.println(b);
-        System.out.println("\n\n board heuristic v1 value: " + h4.evaluate(b,1));
+    }
+    // define equals for double
+    public static boolean equals(double a, double b) {
+        return Math.abs(a-b)<1e-6;
     }
 }

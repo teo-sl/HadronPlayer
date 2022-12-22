@@ -127,9 +127,12 @@ public class MyHeuristicV4 implements Heuristic {
             return (notGenerative%2==1) ? 100_000D : -100_000D;
 
         double hReserved = resWhite-resBlack;
+        if(hReserved==0 && !closeZeros)
+            return (notGenerative%2==1) ? 100_000D : -100_000D;
+
         hReserved = (col==1) ? hReserved : -1* hReserved;
 
-        return hReserved *100;
+        return hReserved *100 - (nMoves-resWhite+resBlack)*10;
 
     }
 
