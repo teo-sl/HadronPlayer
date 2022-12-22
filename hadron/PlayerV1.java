@@ -2,8 +2,8 @@ package hadron;
 
 import hadron.board.Board;
 import hadron.board.ByteBoard;
+import hadron.heuristic.Aenigma;
 import hadron.heuristic.Heuristic;
-import hadron.heuristic.MyHeuristicV1;
 import hadron.research.GameController;
 import hadron.research.GameControllerImpl;
 import hadron.research.NegaSort;
@@ -26,8 +26,7 @@ public class PlayerV1 {
 	}
 	
 	public static void main(String[] args) {
-		//Heuristic h = new GenericHeuristic();
-		Heuristic h = new MyHeuristicV1();
+		Heuristic h = new Aenigma();
 		PlayerV1 p1 = new PlayerV1(h);
 		p1.start(args[0], Integer.parseInt(args[1]));
 	}
