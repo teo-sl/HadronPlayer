@@ -27,10 +27,17 @@ Regarding point 1, to define the "non-playability" condition, it is necessary to
 A graphic example is shown below:
 
 
-![Special move](imgs/SpecialMoveExample.png) &nbsp; &nbsp; ![Fake special move](imgs/FakeSpecial.png)
+<div style="display:flex;">
+    <figure>
+        <img src="imgs/SpecialMoveExample.png">
+        <figcaption>Figure 1: Special move</figcaption>
+    </figure>
+    <figure>
+        <img src="imgs/FakeSpecial.png">
+        <figcaption>Figure 2: Fake special move</figcaption>
+    </figure>
+</div>
 
-- Figure 1: Special move
-- Figure 2: Fake special move
 
 Looking at Figure 1, in the case where the red player inserts the pawn in position R, P will remain unplayable; conversely, if the blue player uses R, P becomes playable.
 
