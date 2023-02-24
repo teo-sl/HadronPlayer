@@ -29,11 +29,11 @@ A graphic example is shown below:
 
 <div style="display:flex;">
     <figure>
-        <img src="imgs/SpecialMoveExample.png">
+        <img src="imgs/SpecialMoveExample.png" width="50%">
         <figcaption>Figure 1: Special move</figcaption>
     </figure>
     <figure>
-        <img src="imgs/FakeSpecial.png">
+        <img src="imgs/FakeSpecial.png" width="50%">
         <figcaption>Figure 2: Fake special move</figcaption>
     </figure>
 </div>
