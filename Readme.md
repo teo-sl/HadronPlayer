@@ -29,15 +29,16 @@ A graphic example is shown below:
 
 <div style="display:flex;">
     <figure>
-        <img src="imgs/SpecialMoveExample.png" width="50%">
+        <img src="imgs/SpecialMoveExample.png" width="40%">
         <figcaption>Figure 1: Special move</figcaption>
     </figure>
     <figure>
-        <img src="imgs/FakeSpecial.png" width="50%">
+        <img src="imgs/FakeSpecial.png" width="40%">
         <figcaption>Figure 2: Fake special move</figcaption>
     </figure>
 </div>
 
+<br>
 
 Looking at Figure 1, in the case where the red player inserts the pawn in position R, P will remain unplayable; conversely, if the blue player uses R, P becomes playable.
 
@@ -65,4 +66,4 @@ The values of $w_1$ = 0.5, $w_2$ = 0.5, and $t$ = 10 ($t$ indicates the number o
 # 3. Conclusions
 The final formula used is as follows:
 
-$$w_1(\#moves)\cdot hSpecialMoves + w_2(\#moves) \cdot hParity + Random(0,1)$$
+$$w_1(numMoves)\cdot hSpecialMoves + w_2(numMoves) \cdot hParity + Random(0,1)$$
