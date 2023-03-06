@@ -57,7 +57,7 @@ The implementation includes, in addition to the "evaluateBoard" method (part of 
 ## 2.1. Two-phase heuristic
 The heuristic has two different behaviors based on the number of remaining moves. If this value is ≥ 10, only the part related to special moves is considered, otherwise, the parity component is also considered. To implement this behavior, weights (i.e. $w_1$ and $w_2$) are used, which are initially set to 1 and 0, and in the second phase to 0.5 and 0.5. It is assumed that towards the end-game there is less presence of generative or destructive moves, and there will probably be basic moves that, once consumed, have no effect.
 
-## 2.2. Randomization
+## 2.2. Randomization
 It was also decided to add a random number between 0 and 1 to the final value returned by the heuristic. In this way, the algorithm tends to have a different behavior on moves with equal evaluation. Following empirical tests, it has been observed that this addition is able to improve the overall behavior of the player.
 
 ## 2.3 Hyper-parameter search
